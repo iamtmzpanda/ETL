@@ -15,3 +15,4 @@ FROM dim_survey_definition LATERAL VIEW EXPLODE(question_ids_array) AS question_
 
 
 # WHERE
+-- DATE
