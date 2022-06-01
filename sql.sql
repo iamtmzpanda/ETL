@@ -18,3 +18,10 @@ FROM dim_survey_definition LATERAL VIEW EXPLODE(question_ids_array) AS question_
 
 # WHERE
 -- DATE
+
+-- HAVING
+SELECT AccountId, MAX(Amount)
+FROM invoice 
+WHERE InvoiceDate > date('2022-03-01') and InvoiceDate < date('2022-06-01') 
+GROUP BY AccountId
+HAVING MAX(Amount) = 0
