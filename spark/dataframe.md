@@ -24,6 +24,15 @@ df.show()
 df.write
   .mode("overwrite")
   .parquet(path)
+  
+  
+// write to hive
+df.write
+  ..partitionBy("$partition_column") // ??
+  .mode(SaveMode.Overwrite)
+  .saveAsTable("dbName.tableName");
+
+  
 ```
 ### Stats
 
@@ -99,7 +108,20 @@ ON Temp.DepartmentId = Department.Id
 WHERE Temp.Rank <= 3
 
 ```
+#### case when
+```scala
+df.withColumn('start', concat(
+                      when(col('start') == 'text', lit('new'))
+                      .otherwise(col('start))
+                     , lit('asd')
+                     )
 
+```
+
+```sql
+
+
+```
 
 
 ### UDFs
@@ -113,14 +135,26 @@ val captalizeUDF = udf(
   )
 df.withColumn("col_n", captalizeUDF("text")).show
 
+
+spark.udf.register("strLen", (str: String) => str.length())
+df.registerTempView
+spark.sql("select name,strLen(name) as name_len from user").show
+
+
 // map
 df.map {
   r => foo(r.getAs[Long](0), r.getAs[Long](0) + 1)
   }
+  
 
 // custom method
+df.snakeCaseColumns
+  .write
+  .save()
 
 
+// struct 
+// case class
 
 ```
 
